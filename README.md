@@ -9,8 +9,6 @@ Official documentation for the Task's Container Definitions can be found [here](
         region = "us-east-1"
       }
 
-      data aws_region region {}
-
       module task_def {
         source = "ecs-container-definition"
 
@@ -34,9 +32,5 @@ Official documentation for the Task's Container Definitions can be found [here](
           { container_port = 8181, host_port = 8181 }
         ]
 
-        awslog_driver_options = {
-          awslogs_group         = "some log group",
-          awslogs_region        = data.aws_region.region.name,
-          awslogs_stream_prefix = "api-gateway"
-        }
+        cloudwatch_log_group = "my-example-log-group"
       }

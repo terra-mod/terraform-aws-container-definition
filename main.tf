@@ -16,14 +16,15 @@ data aws_region region {}
  * @see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#standard_container_definition_params
  */
 locals {
+  image_name = var.name == null ? var.image : var.name
   awslogs_options = merge({
-    awslogs_group = var.image
-    awslogs_region = data.aws_region.region.name
-    awslogs_stream_prefix = var.image_version == null ? "latest" : var.image_version
-  }, var.awslog_driver_options != null ? var.awslog_driver_options : {})
+    awslogs-group         = var.cloudwatch_log_group
+    awslogs-region        = data.aws_region.region.name
+    awslogs-stream-prefix = local.image_name
+  }, var.log_driver_options)
 
   definition = {
-    name      = var.name == null ? var.image : var.name
+    name      = local.image_name
     essential = var.essential
 
     entryPoint = length(var.entrypoint) == 0 ? null : var.entrypoint
@@ -37,7 +38,7 @@ locals {
     healthCheck = var.health_check != null ? { for key, value in var.health_check : key == "start_period" ? "startPeriod" : key => value } : null
 
     environment = var.environment_variables
-    secrets     = { for key, val in var.secrets : key == "value_from" ? "valueFrom" : key => val }
+    secrets     = [for s in var.secrets : { for key, val in s : key == "value_from" ? "valueFrom" : key => val }]
 
     portMappings = [for val in var.port_mappings : { containerPort = val.container_port, hostPort = val.host_port }]
     mountPoints  = [for val in var.mount_points : { containerPath = val.container_path, readOnly : val.read_only, sourceVolume : val.source_volume }]
@@ -45,8 +46,9 @@ locals {
     dependencies = [for val in var.dependencies : { containerName = val.container_name, condition = val.condition }]
 
     logConfiguration = {
-      logDriver = var.log_driver
-      options   = var.log_driver == "awslogs" ? { for key, val in local.awslogs_options : replace(key, "_", "-") => val } : var.log_driver_options
+      logDriver     = var.log_driver
+      options       = var.log_driver == "awslogs" ? local.awslogs_options : var.log_driver_options
+      secretOptions = [for s in var.log_driver_secrets : { for key, val in s : key == "value_from" ? "valueFrom" : key => val }]
     }
   }
 }

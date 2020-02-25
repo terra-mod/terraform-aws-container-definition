@@ -112,17 +112,23 @@ EOF
   default     = "awslogs"
 }
 
+variable cloudwatch_log_group {
+  description = "The name of a Cloudwatch Log Group to log to, when using `awslogs` as the log driver."
+  type        = string
+  default     = null
+}
+
 variable log_driver_options {
-  description = "Options for the chosen Log Driver. This property is ignored if the log driver is `awslogs`, use the specific `awslog_driver_options` input variable instead."
+  description = <<EOF
+Options for the chosen Log Driver. Default values are already set for `awslogs` Log Driver, but this can be used to override the region or stream prefix name.
+Otherwise, for all other Log Driver types, this map allows setting configuration options.
+EOF
   type        = map(string)
   default     = {}
 }
 
-variable awslog_driver_options {
-  description = <<EOF
-When using the `awslogs` logDriver. Contains the attributes that need to be set to properly configure Cloudwatch logs.
-This input variable is ignored if the log driver is not `awslogs`, use the `log_driver_options` input variable instead.
-EOF
-  type        = object({ awslogs_group : string, awslogs_region : string, awslogs_stream_prefix : string })
-  default     = null
+variable log_driver_secrets {
+  description = "The secrets to pass to the log configuration."
+  type        = list(object({ name = string, value_from = string }))
+  default     = []
 }
