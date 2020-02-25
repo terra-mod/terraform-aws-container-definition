@@ -1,7 +1,7 @@
-# ECS Task Definition
+# ECS Container Definition
 
 This module make it easier to create and standardize Container Definitions for your ECS Services.
-Official documentation for Task Definitions can be found [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#standard_container_definition_params).
+Official documentation for the Task's Container Definitions can be found [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#standard_container_definition_params).
 
 ##### Example
 
@@ -12,7 +12,7 @@ Official documentation for Task Definitions can be found [here](https://docs.aws
       data aws_region region {}
 
       module task_def {
-        source = "ecs-task-definition"
+        source = "ecs-container-definition"
 
         name = "api-gateway"
 

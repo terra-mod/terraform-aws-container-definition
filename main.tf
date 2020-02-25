@@ -11,8 +11,7 @@ terraform {
 data aws_region region {}
 
 /**
- * Create the task definition from a map - with in the locals, we fix the keys to camelCase, per the task
- * definition spec.
+ * Create the container definition from a map - with in the locals, we fix the keys to camelCase, per the container definition spec.
  *
  * @see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#standard_container_definition_params
  */
