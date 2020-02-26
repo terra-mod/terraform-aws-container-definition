@@ -63,6 +63,7 @@ EOF
 variable port_mappings {
   description = "The port number on the container that is bound to the user-specified or automatically assigned host port."
   type        = set(object({ container_port : number, host_port : number }))
+  default     = []
 }
 
 variable mount_points {
