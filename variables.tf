@@ -62,18 +62,18 @@ EOF
 # Ports, volumes and dependencies
 variable port_mappings {
   description = "The port number on the container that is bound to the user-specified or automatically assigned host port."
-  type        = list(object({ container_port : number, host_port : number }))
+  type        = set(object({ container_port : number, host_port : number }))
 }
 
 variable mount_points {
   description = "Specifies details on a volume mount point that is used in a container definition."
-  type        = list(object({ container_path : string, read_only : bool, source_volume : string }))
+  type        = set(object({ container_path : string, read_only : bool, source_volume : string }))
   default     = []
 }
 
 variable volumes_from {
   description = "Specifies details on a data volume from another container in the same task definition."
-  type        = list(object({ read_only : bool, source_container : string }))
+  type        = set(object({ read_only : bool, source_container : string }))
   default     = []
 }
 
@@ -82,14 +82,14 @@ variable dependencies {
 The dependencies defined for container startup and shutdown. Requires a container name and condition - where condition can
 be one of `COMPLETE`, `HEALTHY`, `START`, `SUCCESS`.
 EOF
-  type        = list(object({ container_name = string, condition = string }))
+  type        = set(object({ container_name = string, condition = string }))
   default     = []
 }
 
 # Environment Variables and Secrets
 variable secrets {
-  description = "List of secret environment variables. Each secret must be a map of the form { name = ..., valueFrom = <secret_arn> }"
-  type        = list(object({ name = string, value_from = string }))
+  description = "A set of secret environment variables. Each secret must be a map of the form { name = ..., valueFrom = <secret_arn> }"
+  type        = set(object({ name = string, value_from = string }))
   default     = []
 }
 
@@ -98,7 +98,7 @@ variable environment_variables {
 Environment variables that will be passed to the docker container on startup. Each environment variable must be a map of
 the form { name = "...", value = "..." }.
 EOF
-  type        = list(object({ name = string, value = string }))
+  type        = set(object({ name = string, value = string }))
   default     = []
 }
 
@@ -129,6 +129,6 @@ EOF
 
 variable log_driver_secrets {
   description = "The secrets to pass to the log configuration."
-  type        = list(object({ name = string, value_from = string }))
+  type        = set(object({ name = string, value_from = string }))
   default     = []
 }
