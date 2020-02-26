@@ -35,7 +35,13 @@ locals {
     cpu    = var.cpu
     memory = var.memory
 
-    healthCheck = var.health_check != null ? { for key, value in var.health_check : key == "start_period" ? "startPeriod" : key => value } : null
+    healthCheck = var.health_check != null ? {
+      command = var.health_check.command
+      interval = var.health_check.interval
+      timeout = var.health_check.timeout
+      retries = var.health_check.retries
+      startPeriod = var.health_check.start_period
+    } : null
 
     environment = var.environment_variables
     secrets     = [for s in var.secrets : { for key, val in s : key == "value_from" ? "valueFrom" : key => val }]
@@ -43,7 +49,7 @@ locals {
     portMappings = [for val in var.port_mappings : { containerPort = val.container_port, hostPort = val.host_port }]
     mountPoints  = [for val in var.mount_points : { containerPath = val.container_path, readOnly : val.read_only, sourceVolume : val.source_volume }]
     volumesFrom  = [for val in var.volumes_from : { sourceContainer = val.source_container, readOnly = val.read_only }]
-    dependencies = [for val in var.dependencies : { containerName = val.container_name, condition = val.condition }]
+    dependsOn    = [for val in var.dependencies : { containerName = val.container_name, condition = val.condition }]
 
     logConfiguration = {
       logDriver     = var.log_driver
