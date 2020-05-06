@@ -61,8 +61,8 @@ EOF
 
 # Ports, volumes and dependencies
 variable port_mappings {
-  description = "The port number on the container that is bound to the user-specified or automatically assigned host port."
-  type        = set(object({ container_port : number, host_port : number }))
+  description = "The port number and protocol on the container that is bound to the user-specified or automatically assigned host port."
+  type        = set(object({ protocol : string, container_port : number, host_port : number }))
   default     = []
 }
 
