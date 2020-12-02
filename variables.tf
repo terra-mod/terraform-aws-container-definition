@@ -133,3 +133,13 @@ variable log_driver_secrets {
   type        = set(object({ name = string, value_from = string }))
   default     = []
 }
+
+variable "ulimits" {
+  type = list(object({
+    name      = string
+    hardLimit = number
+    softLimit = number
+  }))
+  description = "Container ulimit settings. This is a list of maps, where each map should contain \"name\", \"hardLimit\" and \"softLimit\""
+  default     = null
+}
