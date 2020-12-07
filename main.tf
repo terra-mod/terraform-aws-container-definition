@@ -51,6 +51,8 @@ locals {
     mountPoints  = [for val in var.mount_points : { containerPath = val.container_path, readOnly : val.read_only, sourceVolume : val.source_volume }]
     volumesFrom  = [for val in var.volumes_from : { sourceContainer = val.source_container, readOnly = val.read_only }]
     dependsOn    = [for val in var.dependencies : { containerName = val.container_name, condition = val.condition }]
+    stopTimeout  = var.stop_timeout
+
 
     logConfiguration = {
       logDriver     = var.log_driver
