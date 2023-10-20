@@ -149,3 +149,12 @@ variable "stop_timeout" {
   description = "Time duration (in seconds) to wait before the container is forcefully killed if it doesn't exit normally on its own"
   default     = null
 }
+
+variable "system_controls" {
+  type = list(object({
+    namespace = string
+    value     = string
+  }))
+  description = "A list of namespaced kernel parameters to set in the container. This is a list of maps, where each map should contain \"namespace\" and \"value\""
+  default     = null
+}
